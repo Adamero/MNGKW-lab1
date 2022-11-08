@@ -80,7 +80,7 @@ def main():
     col9 = regex(re9, column1)
     col10 = regex(re10, column1)
     # print(col8)
-    # ok     #ok          #ok  #ok       #ok  #ok  #ok
+            # ok     #ok           #ok   #ok          #ok  #ok    #ok
     write([column1, column2, col3, col4, col5, col6, col8, col9, col10], 'hdfc_test_2.csv')
 
 
