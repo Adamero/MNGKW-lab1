@@ -41,7 +41,7 @@ class Test(TestCase):
         self.assertEqual(main.kolumna6(), Test.odczyt(5))
 
     def test_kolumna7(self):
-        self.assertEqual(main.kolumna7(), Test.odczyt(7))
+        self.assertEqual(main.kolumna7(), Test.odczyt(7))   #iteracja zmienila sie o 2 poniewaz 7 kolumny mielismy nie robic
 
     def test_kolumna8(self):
         self.assertEqual(main.kolumna8(), Test.odczyt(8))
