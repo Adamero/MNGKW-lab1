@@ -51,6 +51,7 @@ class Test(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    #bez kolumny 7 z pliku details
 
 
 

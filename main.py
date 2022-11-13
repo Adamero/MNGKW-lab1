@@ -62,3 +62,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    #bez kolumny 7 z pliku details
