@@ -17,7 +17,7 @@ class Test(TestCase):
         return kolumnaDoTestu
 
     def test_read_csvfile(self):
-        read_csv_file = main.readCSVFile(0)
+        read_csv_file = main.odczyt(0)
         kolumnaDoTestu = Test.odczyt(0)
 
         self.assertEqual(read_csv_file, kolumnaDoTestu)
