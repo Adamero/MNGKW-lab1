@@ -1,58 +1,120 @@
-import unittest
-from unittest import TestCase
-import main
 import csv
+import unittest
+
+from main import Excel
 
 
-class Test(TestCase):
+class MyTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.csvreader = csv.reader(open("details.csv", 'r', encoding="utf-8"))
 
-    def odczyt(nrKolumnyDoTestu):
-        kolumnaDoTestu = []
+    def test_publisher(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                no = row[2]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.publisher(), publisher_value)
 
-        with open("details.csv", "r", encoding="utf-8") as readCSV:
-            read = csv.reader(readCSV)
-            for line in read:
-                kolumnaDoTestu.append(line[nrKolumnyDoTestu])
+    def test_details(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                no = row[2]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.details(), details_value)
 
-        return kolumnaDoTestu
+    def test_no(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                no = row[2]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.no(), no)
 
-    def test_read_csvfile(self):
-        read_csv_file = main.odczyt(0)
-        kolumnaDoTestu = Test.odczyt(0)
+    def test_vol(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                vol = row[3]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.vol(),vol)
 
-        self.assertEqual(read_csv_file, kolumnaDoTestu)
+    def test_articleNo(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                articleNo = row[4]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.vol(), articleNo)
 
-    def test_kolumna1(self):
-        self.assertEqual(main.kolumna1(), Test.odczyt(0))
+    def test_pagesInRange(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                pagesInRange = row[5]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.pagesInRange(), pagesInRange)
 
-    def test_kolumna2(self):
-        self.assertEqual(main.kolumna2(), Test.odczyt(1))
+    def test_publisherName(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                publisherName = row[7]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.publisherName(), publisherName)
 
-    def test_kolumna3(self):
-        self.assertEqual(main.kolumna3(), Test.odczyt(2))
+    def test_publisherLocation(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                publisherLocation = row[8]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.publisherLocation(), publisherLocation)
 
-    def test_kolumna4(self):
-        self.assertEqual(main.kolumna4(), Test.odczyt(3))
-
-    def test_kolumna5(self):
-        self.assertEqual(main.kolumna5(), Test.odczyt(4))
-
-    def test_kolumna6(self):
-        self.assertEqual(main.kolumna6(), Test.odczyt(5))
-
-    def test_kolumna7(self):
-        self.assertEqual(main.kolumna7(), Test.odczyt(7))   #iteracja zmienila sie o 2 poniewaz 7 kolumny mielismy nie robic
-
-    def test_kolumna8(self):
-        self.assertEqual(main.kolumna8(), Test.odczyt(8))
-
-    def test_kolumna9(self):
-        self.assertEqual(main.kolumna9(), Test.odczyt(9))
+    def publisherYear(self):
+        for row in self.csvreader:
+            with self.subTest():
+                # given
+                publisher_value = row[0]
+                details_value = row[1]
+                publisherYear = row[9]
+                # then
+                extractor = Excel(publisher_value, details_value)
+                # expect
+                self.assertEqual(extractor.publisherYear(), publisherYear)
 
 if __name__ == '__main__':
     unittest.main()
-    #bez kolumny 7 z pliku details
-
-
-
-

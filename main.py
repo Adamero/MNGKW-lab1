@@ -1,65 +1,54 @@
 import re
-import csv
 
 
-def odczyt(nrKol: int) -> list[str]:
-    wybierzKolumne = []
-    with open("details.csv", "r", encoding="utf-8") as czytajCSV:
-        odczytZPliku = csv.reader(czytajCSV)
-        for wiersz in odczytZPliku:
-            wybierzKolumne.append(wiersz[nrKol])
+class Excel:
 
-    return wybierzKolumne
+    def __init__(self, publisher_value: str, details_value: str):
+        self.publisher_value = publisher_value
+        self.details_value = details_value
 
-def zapis(lista: list[list[str]]):
-    with open('wynik.csv', 'w', newline="", encoding='utf-8') as zapiszCSV:
-        zapisDoPliku = csv.writer(zapiszCSV)
+    def regex(self, expression: list , column: list) -> str:
 
-        for row in zip(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8]):
-            zapisDoPliku.writerow(row)
+        check = re.search(expression[0], column)
 
-def testWyrazeniaReg(wyrazenieReg: str, zKtorejKolumnySkorzystac: list[str]) -> list:
-    wynik = []
+        if check is not None:
+            if len(expression) > 1:
 
-    for wiersz in zKtorejKolumnySkorzystac:
-        sprawdz = re.search(wyrazenieReg, wiersz)
-        if sprawdz != None:
-            wynik.append(sprawdz.group(0))
+                for i in range(1, len(expression)):
+                    check = re.search(expression[i], check.group(0))
+
+                if check is not None:
+                    return check.group(0)
+                else:
+                    return ""
+            else:
+                return check.group(0)
         else:
-            wynik.append("")
+            return ""
 
-    return wynik
+    def publisher(self):
+        return self.publisher_value
 
-def kolumna1() -> list[str]:
-    return odczyt(0)
+    def details(self):
+        return self.details_value
 
-def kolumna2() -> list[str]:
-    return odczyt(1)
+    def no(self):
+        return self.regex(['((nr \d*)|((No|no)\W \d*)|(num\W \d*))|(iss\W \d*)', '\d*$'], self.details_value)
 
-def kolumna3() -> list[int]:
-    return testWyrazeniaReg('\d*$', testWyrazeniaReg('((nr \d*)|((No|no)\W \d*)|(num\W \d*))|(iss\W \d*)', kolumna2()))
+    def vol(self):
+        return self.regex(['((vol.)|(Vol.)|(T\S))+ +((\d*))|( t. \d*)', '\d*$'], self.details_value)
 
-def kolumna4() -> list[int]:
-    return testWyrazeniaReg('\d*$', testWyrazeniaReg('((vol.)|(Vol.)|(T\S))+ +((\d*))|( t. \d*)', kolumna2()))
+    def articleNo(self):
+        return self.regex(['(art. \w*)', 'e\d*'], self.details_value)
 
-def kolumna5() -> list[str]:
-    return testWyrazeniaReg('e\d*', testWyrazeniaReg('(art. \w*)', kolumna2()))
+    def pagesInRange(self):
+        return self.regex(['((\d*)(-)(\d*))(\d)'], self.details_value)
 
-def kolumna6() -> list[str]:
-    return testWyrazeniaReg('((\d*)(-)(\d*))(\d)', kolumna2())
+    def publisherName(self):
+        return self.regex(['( : )\w*(.)*(,|\\\)', '\w*(.)*(\w|\\\)', '\w(\w*( |-|,|\S))*(\w*(\w*))$'],self.publisher_value)
 
-def kolumna7() -> list[str]:
-    return testWyrazeniaReg('\w(\w*( |-|,|\S))*(\w*(\w*))$',testWyrazeniaReg('\w*(.)*(\w|\\\)', testWyrazeniaReg('( : )\w*(.)*(,|\\\)', kolumna1())))
+    def publisherLocation(self):
+        return self.regex(['^\w*'], self.publisher_value)
 
-def kolumna8() -> list[str]:
-    return testWyrazeniaReg('^\w*', kolumna1())
-
-def kolumna9() -> list[int]:
-    return testWyrazeniaReg('(\w*)(\d\d\d\d)', kolumna1())
-
-def main():
-    zapis([kolumna1(), kolumna2(), kolumna3(), kolumna4(), kolumna5(), kolumna6(), kolumna7(), kolumna8(), kolumna9()])
-
-if __name__ == "__main__":
-    main()
-    #bez kolumny 7 z pliku details
+    def publisherYear(self):
+        return self.regex(['(\w*)(\d\d\d\d)'], self.publisher_value)
